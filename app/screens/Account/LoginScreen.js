@@ -6,12 +6,47 @@ import Screen from "../../components/Screen";
 import AppFormField from "../../components/forms/AppFormField";
 import AppForm from "../../components/forms/AppForm";
 import SubmitButton from "../../components/forms/SubmitButton";
+import { auth } from "../../config/FirebaseAuth";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
 
+const handleSgnUp = () => {
+
+  auth
+  .CreateUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user);
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ..
+  });
+
+};
+
+const handleLogin = () => {
+  auth
+  .signInWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user);
+    // ...
+  })  
+
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  })
+
+}
 function LoginScreen(props) {
   return (
     <Screen style={styles.container}>
