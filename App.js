@@ -1,9 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 import RegisterScreen from "./app/screens/Account/RegisterScreen";
+import {NavigationContainer} from "@react-navigation/native";
+import MyTabs from "./app/components/BottonTabBar";
 
 export default function App() {
   return (
-          <RegisterScreen/>
+      <NavigationContainer>
+          <MyTabs/>
+      </NavigationContainer>
     );
 }
 
