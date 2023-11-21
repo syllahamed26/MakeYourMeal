@@ -1,10 +1,12 @@
 import React from 'react';
 import {StyleSheet, Image, Text} from 'react-native';
+import auth from '@react-native-firebase/auth';
 import Screen from "../../components/Screen";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
+
 import regex from "../../config/regex";
 import colors from "../../config/colors";
 
@@ -16,13 +18,34 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen(props) {
+    const handleRegister = (data) => {
+        console.log(data.name, data.email, data.password);
+        auth()
+            .createUserWithEmailAndPassword(data.email, data.password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log(user);
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    alert('That email address is already in use!')
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    alert('That email address is invalid!');
+                }
+
+                alert(error)
+            });
+    }
+
     return (
         <Screen style={styles.container}>
             <Image style={styles.logo} source={require('../../../assets/cooking-96.png')}/>
 
             <AppForm
                 initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={(values) => {handleRegister(values)}}
                 validationSchema={validationSchema}
             >
                 <AppFormField
@@ -80,6 +103,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: colors.white
     },
     logo: {
@@ -95,6 +119,7 @@ const styles = StyleSheet.create({
     },
     alreadyAccount: {
         padding: 20,
+        fontWeight: 'bold',
     }
 });
 
