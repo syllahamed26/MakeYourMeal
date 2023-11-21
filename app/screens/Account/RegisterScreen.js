@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Image, Text} from 'react-native';
-import {auth}  from "../../../firebaseConfig";
+import {auth, db}  from "../../../firebaseConfig";
 import Screen from "../../components/Screen";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
@@ -17,13 +17,19 @@ const validationSchema = Yup.object().shape({
     confirmPassword: Yup.string().required().oneOf([Yup.ref('password'), null], 'Passwords must match').label('Confirm Password')
 });
 
-function RegisterScreen(props) {
+function RegisterScreen({navigation}) {
     const handleRegister = (data) => {
         console.log(data.name, data.email, data.password);
         auth.createUserWithEmailAndPassword(data.email, data.password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
+                db.collection('users').doc(user.uid).set({
+                    name: data.name,
+                    email: data.email,
+                })
+            }).then(() => {
+                navigation.navigate('Login')
             })
             .catch(error => {
                 if (error.code === 'auth/email-already-in-use') {
