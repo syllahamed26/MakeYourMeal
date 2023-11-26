@@ -7,12 +7,26 @@ import AppFormField from "../../components/forms/AppFormField";
 import AppForm from "../../components/forms/AppForm";
 import SubmitButton from "../../components/forms/SubmitButton";
 
+import {signIn} from "../../services/auth/SignInService";
+
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
 
-function LoginScreen({props, navigation}) {
+function LoginScreen({navigation}) {
+
+const handleLogin = async (values) => {
+    try {
+        const loginSuccessful = await signIn(values);
+        if (loginSuccessful) {
+            navigation.navigate('Home');
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+    }
+}
+
   return (
     <Screen style={styles.container}>
       <Image style={styles.logo} source={require("../../../assets/cooking-96.png")} />
@@ -20,7 +34,7 @@ function LoginScreen({props, navigation}) {
       <View style={styles.form}>
         <AppForm
             initialValues={{ email: "", password: "" }}
-            onSubmit={() => navigation.navigate('Register')}
+            onSubmit={(values) => handleLogin(values)}
             validationSchema={validationSchema}
         >
           <AppFormField

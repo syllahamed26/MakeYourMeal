@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Image, Text} from 'react-native';
+import {StyleSheet, Image, Text, View} from 'react-native';
 import {auth, db}  from "../../../firebaseConfig";
 import Screen from "../../components/Screen";
 import AppForm from "../../components/forms/AppForm";
@@ -10,6 +10,8 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import regex from "../../config/regex";
 import colors from "../../config/colors";
 
+import {register} from "../../services/auth/RegisterService"
+
 const validationSchema = Yup.object().shape({
     name: Yup.string().required().label('Name'),
     email: Yup.string().required().email().matches(regex.email, 'Invalid email').label('Email'),
@@ -18,28 +20,15 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen({navigation}) {
-    const handleRegister = (data) => {
-        console.log(data.name, data.email, data.password);
-        auth.createUserWithEmailAndPassword(data.email, data.password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log(user);
-                db.collection('users').doc(user.uid).set({
-                    name: data.name,
-                    email: data.email,
-                })
-            }).then(() => {
-                navigation.navigate('Login')
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    alert('That email address is already in use !')
-                }else if (error.code === 'auth/invalid-email') {
-                    alert('That email address is invalid !');
-                }else {
-                    alert(error)
-                }
-            });
+    const handleRegister = async (values) => {
+        try {
+            const registrationSuccessful = await register(values);
+            if (registrationSuccessful) {
+                navigation.navigate('Login');
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+        }
     }
 
     return (
@@ -48,7 +37,7 @@ function RegisterScreen({navigation}) {
 
             <AppForm
                 initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
-                onSubmit={(values) => {handleRegister(values)}}
+                onSubmit={(values) => handleRegister(values)}
                 validationSchema={validationSchema}
             >
                 <AppFormField
@@ -92,9 +81,10 @@ function RegisterScreen({navigation}) {
                     width= '90%'
                 />
 
-                <Text style={styles.alreadyAccount}>
-                    Have you already account ? Sign in
-                </Text>
+                <View style={styles.alreadyAccount}>
+                    <Text>Already have an account? </Text>
+                    <Text style={styles.signIn} onPress={() => navigation.navigate('Login')}>Login</Text>
+                </View>
 
                 <SubmitButton title='Register' style={styles.button}/>
             </AppForm>
@@ -122,6 +112,10 @@ const styles = StyleSheet.create({
     },
     alreadyAccount: {
         padding: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    signIn: {
         fontWeight: 'bold',
     }
 });
