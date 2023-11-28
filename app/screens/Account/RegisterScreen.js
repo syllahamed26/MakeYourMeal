@@ -1,12 +1,16 @@
 import React from 'react';
-import {StyleSheet, Image, Text} from 'react-native';
+import {StyleSheet, Image, Text, View} from 'react-native';
+import {auth, db}  from "../../../firebaseConfig";
 import Screen from "../../components/Screen";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
+
 import regex from "../../config/regex";
 import colors from "../../config/colors";
+
+import {register} from "../../services/auth/RegisterService"
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required().label('Name'),
@@ -15,14 +19,25 @@ const validationSchema = Yup.object().shape({
     confirmPassword: Yup.string().required().oneOf([Yup.ref('password'), null], 'Passwords must match').label('Confirm Password')
 });
 
-function RegisterScreen(props) {
+function RegisterScreen({navigation}) {
+    const handleRegister = async (values) => {
+        try {
+            const registrationSuccessful = await register(values);
+            if (registrationSuccessful) {
+                navigation.navigate('Login');
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+        }
+    }
+
     return (
         <Screen style={styles.container}>
             <Image style={styles.logo} source={require('../../../assets/cooking-96.png')}/>
 
             <AppForm
                 initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={(values) => handleRegister(values)}
                 validationSchema={validationSchema}
             >
                 <AppFormField
@@ -66,9 +81,10 @@ function RegisterScreen(props) {
                     width= '90%'
                 />
 
-                <Text style={styles.alreadyAccount}>
-                    Have you already account ? Sign in
-                </Text>
+                <View style={styles.alreadyAccount}>
+                    <Text>Already have an account? </Text>
+                    <Text style={styles.signIn} onPress={() => navigation.navigate('Login')}>Login</Text>
+                </View>
 
                 <SubmitButton title='Register' style={styles.button}/>
             </AppForm>
@@ -80,6 +96,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: colors.white
     },
     logo: {
@@ -95,6 +112,11 @@ const styles = StyleSheet.create({
     },
     alreadyAccount: {
         padding: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    signIn: {
+        fontWeight: 'bold',
     }
 });
 
