@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, Image, View} from "react-native";
+import {StyleSheet, Image, View, Text} from "react-native";
 import * as Yup from "yup";
 
 import Screen from "../../components/Screen";
@@ -55,6 +55,12 @@ const handleLogin = async (values) => {
               secureTextEntry
               textContentType="password"
           />
+
+            <View style={styles.registerContainer}>
+                <Text>You do not have an account? </Text>
+                <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
+            </View>
+
           <SubmitButton title="Login" />
         </AppForm>
       </View>
@@ -79,6 +85,14 @@ const styles = StyleSheet.create({
   form: {
     width: "100%",
   },
+  registerContainer: {
+      padding: 20,
+      flexDirection: 'row',
+      justifyContent: 'center',
+  },
+  register: {
+      fontWeight: 'bold',
+  }
 });
 
 export default LoginScreen;
