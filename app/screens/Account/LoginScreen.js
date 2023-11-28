@@ -56,12 +56,16 @@ const handleLogin = async (values) => {
               textContentType="password"
           />
 
+            <View style={styles.passwordForgotContainer}>
+                <Text style={styles.passwordForgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot your password? </Text>
+            </View>
+
+          <SubmitButton title="Login" style={styles.submitButton} />
+
             <View style={styles.registerContainer}>
                 <Text>You do not have an account? </Text>
                 <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
             </View>
-
-          <SubmitButton title="Login" />
         </AppForm>
       </View>
     </Screen>
@@ -92,7 +96,18 @@ const styles = StyleSheet.create({
   },
   register: {
       fontWeight: 'bold',
-  }
+  },
+    passwordForgotContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+
+    },
+    passwordForgotText: {
+        fontStyle: 'italic',
+    },
+    submitButton: {
+      marginTop: 30,
+    }
 });
 
 export default LoginScreen;
