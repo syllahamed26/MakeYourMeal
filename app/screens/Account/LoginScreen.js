@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, Image, View} from "react-native";
+import {StyleSheet, Image, View, Text} from "react-native";
 import * as Yup from "yup";
 
 import Screen from "../../components/Screen";
@@ -7,12 +7,26 @@ import AppFormField from "../../components/forms/AppFormField";
 import AppForm from "../../components/forms/AppForm";
 import SubmitButton from "../../components/forms/SubmitButton";
 
+import {signIn} from "../../services/auth/SignInService";
+
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
 
-function LoginScreen(props) {
+function LoginScreen({navigation}) {
+
+const handleLogin = async (values) => {
+    try {
+        const loginSuccessful = await signIn(values);
+        if (loginSuccessful) {
+            navigation.navigate('Home');
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+    }
+}
+
   return (
     <Screen style={styles.container}>
       <Image style={styles.logo} source={require("../../../assets/cooking-96.png")} />
@@ -20,7 +34,7 @@ function LoginScreen(props) {
       <View style={styles.form}>
         <AppForm
             initialValues={{ email: "", password: "" }}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={(values) => handleLogin(values)}
             validationSchema={validationSchema}
         >
           <AppFormField
@@ -41,6 +55,12 @@ function LoginScreen(props) {
               secureTextEntry
               textContentType="password"
           />
+
+            <View style={styles.registerContainer}>
+                <Text>You do not have an account? </Text>
+                <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
+            </View>
+
           <SubmitButton title="Login" />
         </AppForm>
       </View>
@@ -65,6 +85,14 @@ const styles = StyleSheet.create({
   form: {
     width: "100%",
   },
+  registerContainer: {
+      padding: 20,
+      flexDirection: 'row',
+      justifyContent: 'center',
+  },
+  register: {
+      fontWeight: 'bold',
+  }
 });
 
 export default LoginScreen;
