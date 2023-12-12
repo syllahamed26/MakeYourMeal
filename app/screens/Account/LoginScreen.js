@@ -8,6 +8,7 @@ import AppForm from "../../components/forms/AppForm";
 import SubmitButton from "../../components/forms/SubmitButton";
 
 import {signIn} from "../../services/auth/SignInService";
+import colors from "../../config/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -20,7 +21,7 @@ const handleLogin = async (values) => {
     try {
         const loginSuccessful = await signIn(values);
         if (loginSuccessful) {
-            navigation.navigate('Home');
+            navigation.reset({index: 0, routes: [{name: 'Home'}]});
         }
     } catch (error) {
         console.error('Error during login:', error);
@@ -29,7 +30,7 @@ const handleLogin = async (values) => {
 
   return (
     <Screen style={styles.container}>
-      <Image style={styles.logo} source={require("../../../assets/cooking-96.png")} />
+      <Image style={styles.logo} source={require("../../../assets/img_2.png")} />
 
       <View style={styles.form}>
         <AppForm
@@ -57,14 +58,16 @@ const handleLogin = async (values) => {
           />
 
             <View style={styles.passwordForgotContainer}>
-                <Text style={styles.passwordForgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot your password? </Text>
+                <Text style={styles.passwordForgotText} onPress={() => navigation.reset({index: 0, routes: [{name: 'ForgotPassword'}]})}>Forgot your password? </Text>
             </View>
 
-          <SubmitButton title="Login" style={styles.submitButton} />
+            <View style={styles.submitButtonContainer}>
+                <SubmitButton title="Login" style={styles.submitButton} />
+            </View>
 
             <View style={styles.registerContainer}>
                 <Text>You do not have an account? </Text>
-                <Text style={styles.register} onPress={() => navigation.navigate('Register')}>Register</Text>
+                <Text style={styles.register} onPress={() => navigation.reset({index: 0, routes: [{name: 'Register'}]})}>Register</Text>
             </View>
         </AppForm>
       </View>
@@ -73,40 +76,46 @@ const handleLogin = async (values) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  logo: {
-    width: 80,
-    height: 80,
-    alignSelf: "center",
-    marginTop: 50,
-    marginBottom: 20,
-  },
-  form: {
-    width: "100%",
-  },
-  registerContainer: {
-      padding: 20,
-      flexDirection: 'row',
-      justifyContent: 'center',
-  },
-  register: {
-      fontWeight: 'bold',
-  },
+    container: {
+        padding: 10,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: colors.white,
+    },
+    logo: {
+        width: 100,
+        height: 100,
+        alignSelf: "center",
+        marginTop: 50,
+        marginBottom: 20,
+    },
+    form: {
+        width: "95%",
+    },
+    registerContainer: {
+        padding: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    register: {
+        fontWeight: 'bold',
+    },
     passwordForgotContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-
     },
     passwordForgotText: {
         fontStyle: 'italic',
     },
     submitButton: {
-      marginTop: 30,
+        marginTop: 30,
+        width: '50%',
+        height: 50
+    },
+    submitButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
     }
 });
 

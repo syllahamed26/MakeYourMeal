@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, Image, Text, View} from 'react-native';
-import {auth, db}  from "../../../firebaseConfig";
 import Screen from "../../components/Screen";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
@@ -24,7 +23,7 @@ function RegisterScreen({navigation}) {
         try {
             const registrationSuccessful = await register(values);
             if (registrationSuccessful) {
-                navigation.navigate('Login');
+                navigation.reset({index: 0, routes: [{name: 'Login'}]});
             }
         } catch (error) {
             console.error('Error during registration:', error);
@@ -33,61 +32,64 @@ function RegisterScreen({navigation}) {
 
     return (
         <Screen style={styles.container}>
-            <Image style={styles.logo} source={require('../../../assets/cooking-96.png')}/>
+            <Image style={styles.logo} source={require('../../../assets/img_2.png')}/>
+            <View style={styles.form}>
+                <AppForm
+                    initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
+                    onSubmit={(values) => handleRegister(values)}
+                    validationSchema={validationSchema}
+                >
+                    <AppFormField
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        icon='account'
+                        name='name'
+                        placeholder='Name'
+                        textContentType='name'
+                    />
 
-            <AppForm
-                initialValues={{name: '', email: '', password: '', confirmPassword: ''}}
-                onSubmit={(values) => handleRegister(values)}
-                validationSchema={validationSchema}
-            >
-                <AppFormField
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    icon='account'
-                    name='name'
-                    placeholder='Name'
-                    textContentType='name'
-                />
+                    <AppFormField
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        icon='email'
+                        keyboardType='email-address'
+                        name='email'
+                        placeholder='Email'
+                        textContentType='emailAddress'
+                    />
 
-                <AppFormField
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    icon='email'
-                    keyboardType='email-address'
-                    name='email'
-                    placeholder='Email'
-                    textContentType='emailAddress'
-                />
+                    <AppFormField
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        icon='lock'
+                        name='password'
+                        placeholder='Password'
+                        secureTextEntry
+                        textContentType='password'
+                        width= '90%'
+                    />
 
-                <AppFormField
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    icon='lock'
-                    name='password'
-                    placeholder='Password'
-                    secureTextEntry
-                    textContentType='password'
-                    width= '90%'
-                />
+                    <AppFormField
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        icon='lock'
+                        name='confirmPassword'
+                        placeholder='Confirm Password'
+                        secureTextEntry
+                        textContentType='password'
+                        width= '90%'
+                    />
 
-                <AppFormField
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    icon='lock'
-                    name='confirmPassword'
-                    placeholder='Confirm Password'
-                    secureTextEntry
-                    textContentType='password'
-                    width= '90%'
-                />
+                    <View style={styles.alreadyAccount}>
+                        <Text>Already have an account? </Text>
+                        <Text style={styles.signIn} onPress={() => navigation.reset({index: 0, routes: [{name: 'Login'}]})}>Login</Text>
+                    </View>
 
-                <View style={styles.alreadyAccount}>
-                    <Text>Already have an account? </Text>
-                    <Text style={styles.signIn} onPress={() => navigation.navigate('Login')}>Login</Text>
-                </View>
-
-                <SubmitButton title='Register' style={styles.button}/>
-            </AppForm>
+                    <View style={styles.submitButtonContainer}>
+                        <SubmitButton title='Register' style={styles.button}/>
+                    </View>
+                </AppForm>
+            </View>
         </Screen>
     );
 }
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colors.white
+        backgroundColor: colors.white,
     },
     logo: {
         width: 80,
@@ -107,16 +109,24 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     button: {
-        width: '80%',
-        height: 50,
+        marginTop: 30,
+        width: '50%',
+        height: 50
     },
     alreadyAccount: {
-        padding: 20,
         flexDirection: 'row',
         justifyContent: 'center',
+        marginTop: 20,
     },
     signIn: {
         fontWeight: 'bold',
+    },
+    form: {
+        width: '95%',
+    },
+    submitButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
     }
 });
 
