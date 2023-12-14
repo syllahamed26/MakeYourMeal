@@ -4,6 +4,7 @@ import {StyleSheet} from "react-native";
 import defaultStyles from "../config/styles";
 import WelcomeScreen from "../screens/Tab/WelcomeScreen";
 import AccountScreen from "../screens/Account/AccountScreen";
+import RecipeScreen from "../screens/RecipeScreen";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
@@ -11,6 +12,7 @@ const Tab = createBottomTabNavigator();
 function MyTabs() {
     return (
         <Tab.Navigator style={styles.tab}>
+            <Tab.Screen name="Search" component={RecipeScreen}/>
             <Tab.Screen name="Welcome" component={WelcomeScreen} options={
                 {
                     tabBarLabel: 'Home',
