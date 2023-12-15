@@ -24,7 +24,7 @@ function MyTabs() {
             <Tab.Screen name="What's my meal today ?" component={RecipeScreen} options={
                 {
                     tabBarLabel: 'Recipe',
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="food" color={color} size={35} />
                     ),
                     headerTitle: 'What\'s my meal today ?',
@@ -33,7 +33,7 @@ function MyTabs() {
             <Tab.Screen name="Account" component={AccountScreen} options={
                 {
                     tabBarLabel: 'Account',
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color}) => (
                         <MaterialCommunityIcons name="account-circle" color={color} size={35} />
                     ),
                     headerTitle: 'My Profile',

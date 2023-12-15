@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native';
 import RegisterScreen from "./app/screens/Account/RegisterScreen";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
