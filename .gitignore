@@ -36,5 +36,4 @@ yarn-error.*
 /.idea/
 
 package-lock.json
-./app/services/config/*
 /app/services/config/secret.js
