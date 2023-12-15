@@ -10,7 +10,7 @@ function ListItem({image, title, subtitle, renderRightActions, renderLeftActions
         <Swipeable renderRightActions={renderLeftActions} renderLeftActions={renderRightActions}>
             <TouchableHighlight
                 style={styles.bigView}
-                onPress={() => console.log("Message selected", title)}
+                underlayColor={colors.none}
             >
                 <>
                     <Image source={image} style={{width: 70, height: 70, borderRadius: 35, marginHorizontal: 10}}/>
@@ -24,7 +24,7 @@ function ListItem({image, title, subtitle, renderRightActions, renderLeftActions
     ) : (
         <TouchableHighlight
             style={styles.bigView}
-            onPress={() => console.log("Message selected", title)}
+            underlayColor={colors.none}
         >
             <>
                 <Image source={image} style={{width: 70, height: 70, borderRadius: 35, marginHorizontal: 10}}/>

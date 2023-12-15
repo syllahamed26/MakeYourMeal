@@ -12,7 +12,6 @@ function AccountScreen(props) {
     useEffect(() => {
         getUser().then(user => {
             setUser(user);
-            console.log(user)
         });
     }, []);
 
