@@ -31,7 +31,10 @@ const Card = (recipe) => {
                                 {recipe.recipe.recipe.ingredients.map((ingredient, index) => (
                                     <AppText style={styles.ingredientLines} key={index}>- {ingredient.text}</AppText>
                                 ))}
-                                <AppText>Recipe:</AppText>
+
+                                {recipe.recipe.recipe.instructionLines.length > 0 && (
+                                    <AppText>Recipe:</AppText>
+                                )}
                                 {recipe.recipe.recipe.instructionLines.map((instruction, index) => (
                                     <AppText style={styles.ingredientLines} key={index}>Step {index}: {instruction}</AppText>
                                 ))}

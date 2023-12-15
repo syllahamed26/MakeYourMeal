@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ImageBackground } from 'react-native';
 import AppText from '../../components/AppText';
 import { getUser } from '../../storage/UserStorage';
+import AppButton from "../../components/AppButton";
+import colors from "../../config/colors";
 
-function WelcomeScreen() {
+function WelcomeScreen({navigation}) {
     const [user, setUser] = useState({});
     useEffect(() => {
         getUser().then((user) => {
@@ -21,6 +23,9 @@ function WelcomeScreen() {
                     Hey {user.name ? user.name : 'there'}, welcome to our app! Ready to discover your next delicious meal?{"\n\n"}
                     Let's start by exploring our Recipes section and find your favorite dish!
                 </AppText>
+                <View style={styles.letsGoButton}>
+                    <AppButton title="Let's go!" onPress={() => {navigation.reset({index: 0, routes: [{name: 'Meal'}]});}}/>
+                </View>
             </View>
         </ImageBackground>
     );
@@ -55,6 +60,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
         marginVertical: 5,
+    },
+    letsGoButton: {
+        width: '50%',
+        height: 50,
+        marginTop: 70,
     },
 });
 

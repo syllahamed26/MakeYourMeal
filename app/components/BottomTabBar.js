@@ -21,7 +21,7 @@ function MyTabs() {
                     headerTitle: 'Home',
                 }
             }/>
-            <Tab.Screen name="What's my meal today ?" component={RecipeScreen} options={
+            <Tab.Screen name="Meal" component={RecipeScreen} options={
                 {
                     tabBarLabel: 'Recipe',
                     tabBarIcon: ({ color }) => (
