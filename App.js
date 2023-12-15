@@ -5,6 +5,7 @@ import LoginScreen from "./app/screens/Account/LoginScreen";
 import MyTabs from "./app/components/BottomTabBar";
 import {useEffect, useState} from "react";
 import ForgotPasswordScreen from "./app/screens/Account/ForgotPasswordScreen";
+import {getUser} from "./app/storage/UserStorage";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
