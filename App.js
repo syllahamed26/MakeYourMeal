@@ -1,11 +1,10 @@
-import { StyleSheet } from 'react-native';
 import RegisterScreen from "./app/screens/Account/RegisterScreen";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import LoginScreen from "./app/screens/Account/LoginScreen";
 import MyTabs from "./app/components/BottomTabBar";
-import ForgotPasswordScreen from './app/screens/Account/ForgotPasswordScreen';
 import {useEffect, useState} from "react";
+import ForgotPasswordScreen from "./app/screens/Account/ForgotPasswordScreen";
 import {getUser} from "./app/storage/UserStorage";
 
 const Stack = createNativeStackNavigator();
@@ -23,7 +22,7 @@ export default function App() {
         checkUser();
     }, []);
 
-  return initialRouteName ? (
+    return initialRouteName ? (
       <NavigationContainer>
         <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{headerShown: false}}>
             <Stack.Screen name="Login" component={LoginScreen}/>
@@ -34,12 +33,3 @@ export default function App() {
       </NavigationContainer>
     ) : null;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

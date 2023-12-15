@@ -34,3 +34,6 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 /.idea/
+
+package-lock.json
+/app/services/config/secret.js
