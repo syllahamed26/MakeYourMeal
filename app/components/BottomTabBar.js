@@ -12,14 +12,22 @@ const Tab = createBottomTabNavigator();
 function MyTabs() {
     return (
         <Tab.Navigator style={styles.tab}>
-            <Tab.Screen name="Search" component={RecipeScreen}/>
             <Tab.Screen name="Welcome" component={WelcomeScreen} options={
                 {
                     tabBarLabel: 'Home',
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="home-circle" color={color} size={35} />
                     ),
                     headerTitle: 'Home',
+                }
+            }/>
+            <Tab.Screen name="What's my meal today ?" component={RecipeScreen} options={
+                {
+                    tabBarLabel: 'Recipe',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="food" color={color} size={35} />
+                    ),
+                    headerTitle: 'What\'s my meal today ?',
                 }
             }/>
             <Tab.Screen name="Account" component={AccountScreen} options={

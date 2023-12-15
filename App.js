@@ -4,42 +4,16 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import LoginScreen from "./app/screens/Account/LoginScreen";
 import MyTabs from "./app/components/BottomTabBar";
-import ForgotPasswordScreen from './app/screens/Account/ForgotPasswordScreen';
-import {useEffect, useState} from "react";
-import {getUser} from "./app/storage/UserStorage";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-    const [initialRouteName, setInitialRouteName] = useState(null);
-    useEffect(() => {
-        const checkUser = async () => {
-            const user = await getUser();
-            if (user) {
-                setInitialRouteName('Home');
-            }else {
-                setInitialRouteName('Login');
-            }
-        }
-        checkUser();
-    }, []);
-
-  return initialRouteName ? (
+  return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{headerShown: false}}>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name="Login" component={LoginScreen}/>
             <Stack.Screen name="Register" component={RegisterScreen}/>
-            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen}/>
             <Stack.Screen name="Home" component={MyTabs}/>
         </Stack.Navigator>
       </NavigationContainer>
-    ) : null;
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
