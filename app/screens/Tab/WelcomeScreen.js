@@ -20,7 +20,7 @@ function WelcomeScreen({navigation}) {
         >
             <View style={styles.container}>
                 <AppText style={styles.welcomeText}>
-                    Hey {user.name ? user.name : 'there'}, welcome to our app! Ready to discover your next delicious meal?{"\n\n"}
+                    Welcome {user.name ? user.name : 'there'} ! Ready to discover your next delicious meal?{"\n\n"}
                     Let's start by exploring our Recipes section and find your favorite dish!
                 </AppText>
                 <View style={styles.letsGoButton}>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     letsGoButton: {
         width: '50%',
         height: 50,
-        marginTop: 70,
+        marginTop: 300,
     },
 });
 
