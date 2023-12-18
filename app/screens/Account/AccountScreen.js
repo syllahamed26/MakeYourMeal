@@ -40,7 +40,9 @@ function AccountScreen(props) {
                     />
                     <AppText
                         style={{fontWeight: "bold", marginLeft: 10}}
-                        onPress={() => console.log("My Favorites")}>{"My Favorites"}
+                        onPress={() => props.navigation.reset({index: 0, routes: [{name: 'Favorite'}]})}
+                    >
+                        {"My Favorites"}
                     </AppText>
                 </View>
             </View>

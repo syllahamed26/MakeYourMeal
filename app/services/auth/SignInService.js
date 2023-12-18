@@ -11,7 +11,7 @@ export const signIn = async (data) => {
         return true;
 
     } catch (error) {
-        if (error.code === 'auth/invalid-login-credentials') {
+        if (error.code === 'auth/invalid-credential') {
             alert('Invalid login credentials !')
         }else if (error.code === 'auth/invalid-email') {
             alert('That email address is invalid !');
@@ -20,7 +20,7 @@ export const signIn = async (data) => {
         } else if (error.code === 'auth/wrong-password') {
             alert('Wrong password !');
         } else {
-            alert(error);
+            alert(error.code);
         }
         return false;
     }

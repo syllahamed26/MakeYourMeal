@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Animated, Dimensions, Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import colors from "../config/colors";
 import AppText from "./AppText";
 import Icon from "./Icon";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {isFavorite, removeFavorite, storeFavorite} from "../storage/FavoriteStorage";
 
-const Card = (recipe) => {
+const Card = ({displayStar, removeFavoriteHandler, ...recipe}) => {
     const [expanded, setExpanded] = useState(false);
     const opacityValue = useState(new Animated.Value(0))[0];
+    const [iconName, setIconName] = useState('');
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
@@ -18,12 +21,57 @@ const Card = (recipe) => {
         }).start();
     };
 
+    const addOrRemoveFavorite = async (recipe) => {
+        const isFavoriteBool = await isFavorite(recipe);
+        if (isFavoriteBool) {
+            await removeFavorite(recipe);
+        } else {
+            await storeFavorite(recipe);
+        }
+        const isFavoriteBoolAfter = await isFavorite(recipe);
+        setIconName(isFavoriteBoolAfter ? "star" : "star-outline");
+
+
+    }
+
+    useEffect(() => {
+        const materialCommunityIconsName = async () => {
+            const isFavoriteBool = await isFavorite(recipe);
+            setIconName(isFavoriteBool ? "star" : "star-outline");
+        }
+        materialCommunityIconsName();
+    }, [recipe]);
+
     return (
         <View style={styles.container}>
                 <View style={styles.card}>
                     <Image style={styles.image} source={{ uri: recipe.recipe.recipe.image }} />
                     <View style={styles.detailsContainer}>
-                        <AppText style={styles.title}>{recipe.recipe.recipe.label}</AppText>
+                        <View style={styles.titleContainer}>
+                            <AppText style={styles.title}>
+                                {recipe.recipe.recipe.label}
+                            </AppText>
+                            {displayStar && (
+                                <MaterialCommunityIcons
+                                    name={iconName}
+                                    size={20}
+                                    color={colors.yellow}
+                                    onPress={() => addOrRemoveFavorite(recipe)}
+                                    style={styles.starIcon}
+                                />
+                            )}
+                            {
+                                removeFavoriteHandler && (
+                                    <MaterialCommunityIcons
+                                        name={"delete"}
+                                        size={20}
+                                        color={colors.red}
+                                        onPress={() => removeFavoriteHandler(recipe)}
+                                        style={styles.starIcon}
+                                    />
+                                )
+                            }
+                        </View>
                         <AppText style={styles.subTitle}>{recipe.recipe.recipe.source}</AppText>
                         {expanded && (
                             <View>
@@ -109,6 +157,25 @@ const styles = StyleSheet.create({
         color: colors.secondary,
         fontSize: 16,
         fontWeight: '500',
+    },
+    titleContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingBottom: 20,
+    },
+    starIcon: {
+        backgroundColor: colors.white,
+        borderRadius: 15,
+        padding: 5,
+        shadowColor: colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
 });
 

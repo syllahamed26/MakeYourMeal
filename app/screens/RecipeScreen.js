@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Animated, SafeAreaView, StatusBar, View, ScrollView } from 'react-native';
+import { Animated, SafeAreaView, StatusBar, View, ScrollView, Platform } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { recipeSearch } from '../services/API/RecipeService';
 import Card from '../components/Card';
 import LoaderComponent from '../components/Loader';
+import colors from "../config/colors";
 
 console.disableYellowBox = true;
 
@@ -28,12 +29,18 @@ const RecipeScreen = () => {
     return (
         <View style={{ flex: 1 }}>
             <SearchBar
+                platform= {Platform.OS === 'ios' ? 'ios' : 'android'}
                 placeholder='Search'
                 lightTheme={true}
                 placeholderTextColor={'#888888'}
                 onChangeText={onChangeHandler}
                 onSubmitEditing={() => onSubmit(searchQuery)}
+                onCancel={() => setSearchQuery('')}
                 value={searchQuery}
+                cancelButtonProps={{ color: colors.red }}
+                cancelButtonTitle={'Cancel'}
+                round={true}
+                showCancel={true}
             />
             <StatusBar barStyle="dark-content" />
             <SafeAreaView style={{ flex: 1 }}>
@@ -45,10 +52,12 @@ const RecipeScreen = () => {
                     }}
                     contentInsetAdjustmentBehavior="automatic">
 
-                    {recipes &&
+                    {
+                        recipes &&
                         recipes.map((recipe, index) => (
-                            <Card key={index} recipe={recipe} />
-                        ))}
+                            <Card key={index} recipe={recipe} displayStar={true}/>
+                        ))
+                    }
 
                     <LoaderComponent loading={loading} />
                 </ScrollView>
