@@ -19,6 +19,7 @@ function ForgotPasswordScreen({navigation}) {
         try {
             const resetSuccessful = await resetPassword(values.email);
             if (resetSuccessful) {
+                alert('Password reset email sent successfully if the email address is present in our system.');
                 navigation.reset({index: 0, routes: [{name: 'Login'}]});
             }
         } catch (error) {

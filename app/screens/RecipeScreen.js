@@ -26,6 +26,11 @@ const RecipeScreen = () => {
 
     const [scrollYValue] = useState(new Animated.Value(0));
 
+    const handleCancel = () => {
+        setSearchQuery('');
+        setRecipes(null);
+    }
+
     return (
         <View style={{ flex: 1 }}>
             <SearchBar
@@ -35,7 +40,7 @@ const RecipeScreen = () => {
                 placeholderTextColor={'#888888'}
                 onChangeText={onChangeHandler}
                 onSubmitEditing={() => onSubmit(searchQuery)}
-                onCancel={() => setSearchQuery('')}
+                onCancel={() => handleCancel()}
                 value={searchQuery}
                 cancelButtonProps={{ color: colors.red }}
                 cancelButtonTitle={'Cancel'}
@@ -57,6 +62,25 @@ const RecipeScreen = () => {
                         recipes.map((recipe, index) => (
                             <Card key={index} recipe={recipe} displayStar={true}/>
                         ))
+                    }
+
+                    {
+                        recipes && recipes.length === 0 && !loading &&
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Animated.Text style={{
+                                opacity: scrollYValue.interpolate({
+                                    inputRange: [0, 125, 250],
+                                    outputRange: [1, 1, 0],
+                                    extrapolate: 'clamp',
+                                }),
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                                color: colors.red,
+                                textAlign: 'center',
+                            }}>
+                                Hum Hum... Seems like we don't have any recipe for you 😢
+                            </Animated.Text>
+                        </View>
                     }
 
                     <LoaderComponent loading={loading} />
